@@ -1,0 +1,75 @@
+.signup-wrapper {
+  display: flex;
+  max-width: 900px;
+  margin: 0 auto;
+  box-shadow: var(--shadow-2);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.signup-wrapper > * {
+  flex: 1;
+}
+
+.form-title-container {
+  font-size: 34px;
+  font-weight: 500;
+  padding-bottom: 20px;
+}
+
+.brand-card {
+  background: black;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+  text-align: center;
+}
+
+.form-card {
+  background: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 70px;
+}
+
+.brand-card .logo {
+  opacity: 0.8;
+  font-size: 50px;
+  padding: 20px 0;
+}
+
+.brand-card-header {
+  font-size: 22px;
+  margin: 20px 0;
+  max-width: 70%;
+}
+
+form > * {
+  width: 100%;
+}
+
+form > div {
+  display: flex;
+  justify-content: center;
+}
+
+.form-input-container {
+  width: 100%;
+  margin: 10px 0;
+}
+
+.form-toggle-container {
+  margin-top: 20px;
+  color: rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  text-align: center;
+}
+
+.form-toggle-container:hover {
+  color: rgba(0, 0, 0, 0.7);
+}
