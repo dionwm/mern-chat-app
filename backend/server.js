@@ -1,32 +1,27 @@
 const express = require("express");
-const { chats } = require("./data/data");
 const connectDB = require("./config/db");
-
 require("dotenv").config();
 
+const { chats } = require("./data/data");
+const { pageNotFound, errorHandler } = require("./middleware/errorMiddleware");
+
+// Config, Init etc.
 connectDB();
-
 const app = express();
+app.use(express.json()); // allows app to accept JSON data
 
+// Routes Imports
+const userRoute = require("./routes/userRoute");
+
+// APIs
 app.get("/", (req, res) => {
   res.send("API is running");
 });
 
-app.get("/api/chats", (req, res) => {
-  res.send(chats);
-});
+app.use("/api/user", userRoute);
 
-app.get("/api/chats/:chat_id", (req, res) => {
-  const {
-    params: { chat_id },
-  } = req;
-
-  console.log(chat_id);
-
-  let singleChat = chats.find((chat) => chat._id === chat_id);
-
-  res.send(singleChat);
-});
+app.use(pageNotFound);
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 
