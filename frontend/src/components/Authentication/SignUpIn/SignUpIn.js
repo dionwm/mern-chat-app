@@ -68,7 +68,7 @@ export default function SignUpIn({ isSignUp, setIsSignUp }) {
           <div className="form-input-container">
             <Input
               type="email"
-              placeholder={"Email*"}
+              placeholder={isSignUp ? "Email*" : "Email"}
               isRequired={true}
               setState={setEmail}
             />
@@ -77,7 +77,7 @@ export default function SignUpIn({ isSignUp, setIsSignUp }) {
           <div className="form-input-container">
             <Input
               type="password"
-              placeholder={"Password*"}
+              placeholder={isSignUp ? "Password*" : "Password"}
               isRequired={true}
               setState={setPassword}
             />
