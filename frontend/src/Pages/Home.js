@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import SignUpIn from "../components/Authentication/SignUpIn/SignUpIn";
 
 const Home = () => {
-  const [isSignUp, setIsSignUp] = useState(false);
+  const [isSignUp, setIsSignUp] = useState(true);
 
   return (
     <Container

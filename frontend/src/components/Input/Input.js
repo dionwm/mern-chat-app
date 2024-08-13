@@ -3,7 +3,7 @@ import "./Input.css";
 
 export default function Input({
   type,
-  setState,
+  onChange,
   placeholder,
   className,
   isRequired,
@@ -11,9 +11,13 @@ export default function Input({
   return (
     <input
       type={type}
-      class={className ? className : undefined}
+      className={className ? className : undefined}
       placeholder={type !== "file" ? placeholder : undefined}
-      onChange={(e) => setState(e.target.value)}
+      onChange={(e) => {
+        type !== "file"
+          ? onChange(e.target.value)
+          : onChange(e.target.files[0]);
+      }}
       autoComplete="on"
       accept={type === "file" ? "image/*" : undefined}
       required={isRequired ? true : undefined}
