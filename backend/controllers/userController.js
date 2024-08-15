@@ -58,4 +58,24 @@ const loginUser = expressAsyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { registerUser, loginUser };
+// fetch user - /api/user?search=dwm
+const fetchUser = expressAsyncHandler(async (req, res) => {
+  const searchKeyword = req.query.search
+    ? {
+        $or: [
+          // $or - performs logical OR on an array of expressions
+          { firstName: { $regex: req.query.search, $options: "i" } }, // $regex - patterns matches strings using regex
+          { lastName: { $regex: req.query.search, $options: "i" } }, // $options - "i" instructs case insensitive search
+          { email: { $regex: req.query.search, $options: "i" } },
+        ],
+      }
+    : {};
+
+  const users = await User.find(searchKeyword).find({
+    _id: { $ne: req.user._id }, // #ne - not equals
+  });
+
+  res.send(users);
+});
+
+module.exports = { registerUser, loginUser, fetchUser };

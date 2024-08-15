@@ -1,17 +1,18 @@
 const express = require("express");
 const connectDB = require("./config/db");
-require("dotenv").config();
 
-const { chats } = require("./data/data");
 const { pageNotFound, errorHandler } = require("./middleware/errorMiddleware");
 
 // Config, Init etc.
+require("dotenv").config();
 connectDB();
 const app = express();
+
 app.use(express.json()); // allows app to accept JSON data
 
 // Routes Imports
 const userRoute = require("./routes/userRoute");
+const chatRoute = require("./routes/chatRoute");
 
 // APIs
 app.get("/", (req, res) => {
@@ -19,6 +20,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/user", userRoute);
+app.use("/api/chat", chatRoute);
 
 app.use(pageNotFound);
 app.use(errorHandler);
