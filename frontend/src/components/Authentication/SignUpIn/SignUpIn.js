@@ -115,10 +115,10 @@ export default function SignUpIn({ isSignUp, setIsSignUp }) {
         position: "bottom",
       });
 
-      // localStorage.setItem("userInfo", JSON.stringify(data));
+      localStorage.setItem("userInfo", JSON.stringify(data));
       setLoading(false);
 
-      // navigate("/chats");
+      navigate("/chats");
     } catch (error) {
       toast({
         title: "An error occured while trying to create this user",
@@ -169,7 +169,7 @@ export default function SignUpIn({ isSignUp, setIsSignUp }) {
         position: "bottom",
       });
 
-      // localStorage.setItem("userInfo", JSON.stringify(data));
+      localStorage.setItem("userInfo", JSON.stringify(data));
       setLoading(false);
 
       navigate("/chats");
