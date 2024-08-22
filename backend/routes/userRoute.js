@@ -13,6 +13,6 @@ router.post("/register", registerUser);
 
 router.post("/login", loginUser);
 
-router.get("/search", verifyAuthorization, fetchUser);
+router.get("/", verifyAuthorization, fetchUser);
 
 module.exports = router;

@@ -1,10 +1,19 @@
 import { Container } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import SignUpIn from "../components/Authentication/SignUpIn/SignUpIn";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
-  const [isSignUp, setIsSignUp] = useState(true);
+  const navigate = useNavigate();
+
+  const [isSignUp, setIsSignUp] = useState(false);
+
+  useEffect(() => {
+    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+
+    if (userInfo) navigate("/chats");
+  }, [navigate]);
 
   return (
     <Container
