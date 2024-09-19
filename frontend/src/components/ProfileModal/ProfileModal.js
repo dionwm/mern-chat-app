@@ -49,15 +49,13 @@ export default function ProfileModal({ user, children }) {
               </Box>
             </Box>
 
-            {user.isGroupChat ? (
+            {user.isGroupChat && (
               <>
                 <Box>Members</Box>
                 {user.users.map((user) => (
-                  <Box>{user.firstName}</Box>
+                  <Box key={user._id}>{user.firstName}</Box>
                 ))}
               </>
-            ) : (
-              <></>
             )}
           </ModalBody>
 

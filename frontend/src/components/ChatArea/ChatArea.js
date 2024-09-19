@@ -40,7 +40,7 @@ export default function ChatArea() {
                     ? userData.chatName
                     : `${userData.firstName} ${userData.lastName}`
                 }
-                src={userData.profilePicture ? userData.profilePicture : ""}
+                src={userData?.profilePicture}
               />
               <Box px={2} fontSize="18px" fontWeight="400">
                 {userData?.isGroupChat
