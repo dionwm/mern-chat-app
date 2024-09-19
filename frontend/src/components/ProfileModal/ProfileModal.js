@@ -4,7 +4,6 @@ import {
   Button,
   Modal,
   ModalBody,
-  ModalCloseButton,
   ModalContent,
   ModalFooter,
   ModalHeader,
@@ -33,16 +32,33 @@ export default function ProfileModal({ user, children }) {
             >
               <Avatar
                 size="xl"
-                name={`${user.firstName} ${user.lastName}`}
-                src={user.profilePicture}
+                name={
+                  user?.isGroupChat
+                    ? user.chatName
+                    : `${user.firstName} ${user.lastName}`
+                }
+                src={user?.profilePicture}
               />
               <Box padding={4} textAlign="center">
                 <Box fontSize="24px" fontWeight="600">
-                  {`${user.firstName} ${user.lastName}`}
+                  {user?.isGroupChat
+                    ? user.chatName
+                    : `${user.firstName} ${user.lastName}`}
                 </Box>
                 <Box color="grey">{user.email}</Box>
               </Box>
             </Box>
+
+            {user.isGroupChat ? (
+              <>
+                <Box>Members</Box>
+                {user.users.map((user) => (
+                  <Box>{user.firstName}</Box>
+                ))}
+              </>
+            ) : (
+              <></>
+            )}
           </ModalBody>
 
           <ModalFooter>
