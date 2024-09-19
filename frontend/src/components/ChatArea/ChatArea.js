@@ -11,9 +11,12 @@ export default function ChatArea() {
 
   const loggedUser = JSON.parse(localStorage.getItem("userInfo"));
   const userData = selectedChat
-    ? getSender(loggedUser, selectedChat.users)
-    : {};
+    ? selectedChat.isGroupChat
+      ? selectedChat
+      : getSender(loggedUser, selectedChat.users)
+    : null;
 
+  console.log("userData", userData);
   return (
     <Box className="chatarea-container" height="100%">
       {selectedChat ? (
@@ -21,7 +24,6 @@ export default function ChatArea() {
           className="chatarea-header"
           borderBottom="1px solid #EEF1F6"
           padding="10px"
-          // width={}
         >
           <ProfileModal user={userData}>
             <Box
@@ -33,11 +35,17 @@ export default function ChatArea() {
             >
               <Avatar
                 size="sm"
-                name={`${userData.firstName} ${userData.lastName}`}
-                src={userData.profilePicture}
+                name={
+                  userData?.isGroupChat
+                    ? userData.chatName
+                    : `${userData.firstName} ${userData.lastName}`
+                }
+                src={userData?.profilePicture}
               />
               <Box px={2} fontSize="18px" fontWeight="400">
-                {`${userData.firstName} ${userData.lastName}`}
+                {userData?.isGroupChat
+                  ? userData.chatName
+                  : `${userData.firstName} ${userData.lastName}`}
               </Box>
             </Box>
           </ProfileModal>
@@ -50,8 +58,12 @@ export default function ChatArea() {
           alignItems="center"
           justifyContent="center"
           flexDirection="column"
+          textAlign="center"
+          fontSize="50px"
+          fontWeight="200"
+          color="gray.500"
         >
-          Pick up where you left off
+          Pick up where <br /> you left off
         </Box>
       )}
     </Box>
