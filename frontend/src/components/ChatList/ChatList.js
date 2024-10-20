@@ -98,6 +98,8 @@ export default function ChatList() {
       className="chatlist-container"
       borderRight="1px solid #EEF1F6"
       height="100%"
+      display="flex"
+      flexDirection="column"
     >
       {!isSearchActive ? (
         <>
@@ -107,13 +109,18 @@ export default function ChatList() {
             alignItems="center"
             justifyContent="space-between"
             borderBottom="1px solid #EEF1F6"
-            padding="10px"
+            px={4}
+            py={2}
           >
-            <Box textAlign="center" px={2} fontSize="18px" fontWeight="500">
+            <Box textAlign="center" fontSize="18px" fontWeight="500">
               Chats
             </Box>
 
-            <Box className="chatlist-header-btns-container" display="flex">
+            <Box
+              className="chatlist-header-btns-container"
+              display="flex"
+              gap={2}
+            >
               <CreateGroupChatModal>
                 <Tooltip label="New Group" placement="bottom-end" hasArrow>
                   <IconButton
@@ -136,24 +143,17 @@ export default function ChatList() {
               </Tooltip>
             </Box>
           </Box>
-          <Box
-            className="chatlist-body"
-            maxHeight="90%" // Adjust based on your header's height
-            overflowY="auto"
-          >
-            {chats?.map((chat) => {
-              return (
-                <ChatListItem
-                  key={chat._id}
-                  user={chat}
-                  onClick={() => {
-                    setSelectedChat(chat);
-                  }}
-                  background={selectedChat === chat ? "#EEF1F6" : ""}
-                  loggedUser={loggedUser}
-                />
-              );
-            })}
+
+          <Box className="chatlist-body" flexGrow={1} overflowY="auto">
+            {chats?.map((chat) => (
+              <ChatListItem
+                key={chat._id}
+                user={chat}
+                onClick={() => setSelectedChat(chat)}
+                background={selectedChat === chat ? "#EEF1F6" : "transparent"}
+                loggedUser={loggedUser}
+              />
+            ))}
           </Box>
         </>
       ) : (
@@ -163,20 +163,20 @@ export default function ChatList() {
             display="flex"
             alignItems="center"
             justifyContent="space-between"
-            padding="10px"
+            p={2} // Consistent padding
             borderBottom="1px solid #EEF1F6"
           >
             <Input
               size="sm"
-              placeholder={"Search name or email"}
+              placeholder="Search by name or email"
               value={search || ""}
               onChange={(e) => searchUsers(e.target.value)}
-              borderRadius={6}
+              borderRadius="md"
               focusBorderColor="gray.500"
             />
 
             <IconButton
-              aria-label="Create Group"
+              aria-label="Close Search"
               variant="ghost"
               colorScheme="gray"
               size="sm"
@@ -186,22 +186,24 @@ export default function ChatList() {
                 setSearchResult([]);
                 setIsSearchActive(false);
               }}
-              ml="10px"
+              ml={2}
             />
           </Box>
 
-          {isLoading ? (
-            <LoadingMessage />
-          ) : (
-            searchResult?.map((user) => (
-              <ChatListItem
-                key={user._id}
-                user={user}
-                isSearchActive={isSearchActive}
-                onClick={() => openSelectedChat(user._id)}
-              />
-            ))
-          )}
+          <Box className="search-results" flexGrow={1} overflowY="auto">
+            {isLoading ? (
+              <LoadingMessage />
+            ) : (
+              searchResult?.map((user) => (
+                <ChatListItem
+                  key={user._id}
+                  user={user}
+                  isSearchActive={isSearchActive}
+                  onClick={() => openSelectedChat(user._id)}
+                />
+              ))
+            )}
+          </Box>
         </>
       )}
     </Box>
