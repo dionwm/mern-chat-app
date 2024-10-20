@@ -25,7 +25,7 @@ export default function ChatArea() {
           borderBottom="1px solid #EEF1F6"
           padding="10px"
         >
-          <ProfileModal user={userData}>
+          <ProfileModal user={userData} setSelectedChat={setSelectedChat}>
             <Box
               display="flex"
               alignItems="center"
