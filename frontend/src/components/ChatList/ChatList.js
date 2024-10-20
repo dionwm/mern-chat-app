@@ -136,7 +136,11 @@ export default function ChatList() {
               </Tooltip>
             </Box>
           </Box>
-          <Box className="chatlist-body">
+          <Box
+            className="chatlist-body"
+            maxHeight="90%" // Adjust based on your header's height
+            overflowY="auto"
+          >
             {chats?.map((chat) => {
               return (
                 <ChatListItem
