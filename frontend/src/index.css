@@ -3,6 +3,22 @@
   --shadow-2: 0px 0px 30px 8px #272829;
 }
 
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #ececec;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #90a4ae;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #f4f3f377;
+}
+
 body {
   margin: 0;
 }
