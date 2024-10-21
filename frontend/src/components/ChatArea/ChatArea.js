@@ -6,6 +6,10 @@ import { getSender } from "../../Hooks/ChatHooks";
 import PaperPlaneButton from "../PaperPlaneButton/PaperPlaneButton";
 import LoadingMessage from "../LoadingMessage/LoadingMessage";
 import axios from "axios";
+import io from "socket.io-client";
+
+const ENDPOINT = "http://localhost:5000";
+let socket, selectedChatCompare;
 
 export default function ChatArea() {
   let toast = useToast();
@@ -15,8 +19,10 @@ export default function ChatArea() {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-
+  const [isSocketConnected, setIsSocketConnected] = useState(false);
   const loggedUser = JSON.parse(localStorage.getItem("userInfo"));
+  const [isTyping, setIsTyping] = useState(false);
+  const [typing, setTyping] = useState(false);
 
   const userData = selectedChat
     ? selectedChat.isGroupChat
@@ -45,6 +51,8 @@ export default function ChatArea() {
 
       setMessages(data);
       setIsLoading(false);
+
+      socket.emit("join-chat", selectedChat._id);
     } catch (error) {
       toast({
         title: "An error occured while fetching messages",
@@ -62,6 +70,7 @@ export default function ChatArea() {
 
   async function sendMessage() {
     try {
+      socket.emit("is-stopped-typing", selectedChat._id);
       if (newMessage) {
         const config = {
           headers: {
@@ -78,6 +87,7 @@ export default function ChatArea() {
           config
         );
 
+        socket.emit("new-message", data);
         setMessages([...messages, data]);
       }
     } catch (error) {
@@ -91,8 +101,41 @@ export default function ChatArea() {
     }
   }
 
+  function handleTyping(event) {
+    setNewMessage(event.target.value);
+
+    if (!isSocketConnected) return;
+
+    if (!typing) {
+      setTyping(true);
+      socket.emit("is-typing", selectedChat._id);
+    }
+
+    let lastTypingEvent = new Date().getTime();
+    let timeLength = 3000;
+
+    setTimeout(() => {
+      let currTime = new Date().getTime();
+      let timeDiff = currTime - lastTypingEvent;
+
+      if (timeDiff >= timeLength && typing) {
+        socket.emit("is-stopped-typing", selectedChat._id);
+        setTyping(false);
+      }
+    }, timeLength);
+  }
+
+  useEffect(() => {
+    socket = io(ENDPOINT);
+    socket.emit("setup", user);
+    socket.on("connected", () => setIsSocketConnected(true));
+    socket.on("is-typing", () => setIsTyping(true));
+    socket.on("is-stopped-typing", () => setIsTyping(false));
+  }, []);
+
   useEffect(() => {
     fetchChatMessages();
+    selectedChatCompare = selectedChat;
   }, [selectedChat]);
 
   useEffect(() => {
@@ -100,6 +143,19 @@ export default function ChatArea() {
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [messages]);
+
+  useEffect(() => {
+    socket.on("incoming-message", (incomingMessage) => {
+      if (
+        !selectedChatCompare ||
+        selectedChatCompare._id !== incomingMessage.chat._id
+      ) {
+        // notify
+      } else {
+        setMessages([...messages, incomingMessage]);
+      }
+    });
+  });
 
   return (
     <>
@@ -138,9 +194,7 @@ export default function ChatArea() {
                       ? userData.chatName
                       : `${userData.firstName} ${userData.lastName}`}
                   </Box>
-                  <Box>
-                    {newMessage && <Box fontSize="10px">Typing...</Box>}
-                  </Box>
+                  <Box>{isTyping && <Box fontSize="10px">Typing...</Box>}</Box>
                 </Box>
               </Box>
             </ProfileModal>
@@ -233,9 +287,7 @@ export default function ChatArea() {
             <Input
               placeholder="Type a message..."
               value={newMessage}
-              onChange={(e) => {
-                setNewMessage(e.target.value);
-              }}
+              onChange={handleTyping}
               onKeyDown={(e) => {
                 handleEnterKey(e);
               }}
